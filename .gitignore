@@ -1,1 +1,2 @@
-echo "assets/js/config.js" >> .gitignore
+# Ignore files for git
+assets/js/config.js
