@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     window.CONFIG = {
-        API_URL: 'https://issessionsctf.ctfd.io/api/v1/scoreboard',
+        API_URL: 'https://issessionsctf.ctfd.io/api/v1/scoreboard', // Added CORS Proxy
         UPDATE_INTERVAL: 10000, // 10s for testing, usually 5 minutes so 300000ms
         MAX_TEAMS: 200,
         //DEMO_MODE: true,

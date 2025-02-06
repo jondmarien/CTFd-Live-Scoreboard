@@ -144,6 +144,10 @@ body {
     background: rgba(255, 77, 77, 0.2);
 }
 
+.team.expanded {
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+}
+
 .team.expanded .members {
     max-height: 500px; /* Adjust based on max expected member count */
 }
@@ -170,11 +174,6 @@ body {
     margin-left: 20px;
     color: #ff4d4d;
 }
-
-.team.expanded {
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
-}
-
 
 .position {
     color: #33FF33;

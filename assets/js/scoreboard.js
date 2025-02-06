@@ -16,6 +16,7 @@ class Scoreboard {
             console.error('Scoreboard: Container element not found');
         }
 
+        this.setupTeamInteractions();
         this.lastUpdate = null;
         this.updateInterval = null;
         this.isLoading = false;
@@ -114,23 +115,23 @@ class Scoreboard {
 
     // Function to handle team interactions
     setupTeamInteractions() {
-        // Remove any existing event listeners when refreshing
-        const oldScoreboard = document.getElementById('scoreboard');
-        const newScoreboard = oldScoreboard.cloneNode(true);
-        oldScoreboard.parentNode.replaceChild(newScoreboard, oldScoreboard);
-
-        // Add new event listeners
-        newScoreboard.addEventListener('click', (e) => {
+        // Remove old event listeners by replacing the container
+        const newContainer = this.container.cloneNode(true);
+        this.container.parentNode.replaceChild(newContainer, this.container);
+        this.container = newContainer;
+    
+        // Add new event listeners with proper delegation
+        this.container.addEventListener('click', (e) => {
             const teamHeader = e.target.closest('.team-header');
-            if (teamHeader) {
-                const team = teamHeader.closest('.team');
-                const membersDiv = team.querySelector('.members');
-                
-                // Only toggle if clicking the team name area
-                if (e.target.classList.contains('name') || e.target.classList.contains('team-header')) {
-                    membersDiv.style.display = membersDiv.style.display === 'none' ? 'block' : 'none';
-                    team.classList.toggle('expanded');
-                }
+            if (!teamHeader) return;
+    
+            const team = teamHeader.closest('.team');
+            const membersDiv = team?.querySelector('.members');
+            
+            if (membersDiv) {
+                const isHidden = membersDiv.style.display === 'none';
+                membersDiv.style.display = isHidden ? 'block' : 'none';
+                team.classList.toggle('expanded');
             }
         });
     }
@@ -173,6 +174,17 @@ class Scoreboard {
                 solves: []
             }
         ];
+    }
+
+    // Add to your class
+    renderMockData() {
+        const mockData = this.getMockData();
+        let html = '<div class="scoreboard-container">';
+        mockData.forEach((team, index) => {
+            html += this.renderTeam(team, index);
+        });
+        html += '</div>';
+        return html;
     }
     
     renderTeam(team, index) {
@@ -256,17 +268,15 @@ class Scoreboard {
             const response = await fetch(CONFIG.API_URL, {
                 method: 'GET',
                 headers: {
-                    'Authorization': CONFIG.API_TOKEN ? `Token ${CONFIG.API_TOKEN}` : '',
-                    'Accept': 'application/json',
-                    'Accept-Encoding': 'gzip, deflate, br, zstd',
-                    'Cache-Control': 'no-cache',
-                    'DNT': '1',
-                    'Priority': 'u=0, i'
+                    'Authorization': `Token ${CONFIG.API_TOKEN}`,
+                    'Accept': 'application/json'
                 },
-                credentials: 'include'
+                mode: 'cors',
             });
 
-            console.log('Data received:', data);
+
+            // Add CORS proxy for development
+            //const response = await fetch(`https://cors-anywhere.herokuapp.com/${CONFIG.API_URL}`, {
     
             // Handle HTTP errors
             if (!response.ok) {
@@ -282,6 +292,8 @@ class Scoreboard {
     
             const data = await response.json();
     
+            console.log('Data received:', data);
+
             // Validate response structure
             if (!data?.success || !Array.isArray(data.data)) {
                 throw new Error("Invalid API response structure");
@@ -300,18 +312,21 @@ class Scoreboard {
             this.showError(error.message);
             
             console.log('Loading mock data...');
+            this.isLoading = false;
             // Fallback to mock data
-            return this.getMockData();
+            return data.data || this.getMockData();
         }
     }
 
     // Function to update the scoreboard
     async updateScoreboard() {
         if (this.isLoading) return;
-
+        this.isLoading = true;
         this.showLoading();
+
         try {
-            const data = await this.fetchScoreboard();
+            const responseData = await this.fetchScoreboard();
+            const data = responseData || this.getMockData();
             if (!data) return;
 
             let html = '<div class="scoreboard-container">';
@@ -336,7 +351,9 @@ class Scoreboard {
 
             console.log('Scoreboard updated successfully.');
         } catch (error) {
-            this.showError('Failed to render scoreboard: ' + error.message);
+            console.error('Failed to update scoreboard: ' + error);
+            this.showError(error.message);
+            this.container.innerHTML = this.renderMockData();
         } finally {
             this.isLoading = false;
         }
