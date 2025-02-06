@@ -7,7 +7,4 @@ This is a live scoreboard for CTFd. It updates every 5 minutes and displays the 
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/jondmarien/CTFd-Scoreboard.git
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run the app: `python app.py`
-
-
+2. Run on a local server or pull from docker to CTFd: `python3 -m http.server 8000`
