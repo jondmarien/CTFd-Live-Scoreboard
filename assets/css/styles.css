@@ -211,6 +211,26 @@ body {
     margin: 20px auto;
 }
 
+.last-updated {
+    color: #ff4d4d;
+    font-size: 0.8em;
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ff4d4d33;
+    display: flex;
+    justify-content: space-between;
+}
+
+.timestamp-label {
+    opacity: 0.8;
+}
+
+.timestamp-value {
+    font-weight: bold;
+    text-shadow: 0 0 5px #ff4d4d;
+}
+
+
 /* Existing Animations from Mission Panel */
 @keyframes glowText {
     0% { text-shadow: 0 0 5px #ff4d4d; }

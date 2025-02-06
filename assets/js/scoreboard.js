@@ -162,7 +162,7 @@ class Scoreboard {
                     { id: 4, name: "Sarah Johnson", score: 125 }
                 ],
                 solves: [
-                    { challenge_id: 103, value: 250 }
+                    { challenge_id: 103, value: 125 }
                 ]
             },
             {
@@ -327,8 +327,8 @@ class Scoreboard {
         try {
             const responseData = await this.fetchScoreboard();
             const data = responseData || this.getMockData();
-            if (!data) return;
-
+    
+            // Open scoreboard-container
             let html = '<div class="scoreboard-container">';
             data.forEach((team, index) => {
                 html += this.renderTeam(team, index);
@@ -342,8 +342,14 @@ class Scoreboard {
                 hour12: true 
             }).toLowerCase();
             
-            html += `<div class="last-updated">Last updated: ${timestamp}</div>`;
-            html += '</div>';
+            // Add to scoreboard-container
+            html += `
+                <div class="last-updated">
+                    <span class="timestamp-label">Last updated:</span>
+                    <span class="timestamp-value">${timestamp}</span>
+                </div>
+            `;
+            html += '</div>'; // Close scoreboard-container
 
             this.container.innerHTML = html;
             this.setupTeamInteractions();
@@ -351,9 +357,27 @@ class Scoreboard {
 
             console.log('Scoreboard updated successfully.');
         } catch (error) {
-            console.error('Failed to update scoreboard: ' + error);
+            console.error('Update error:', error);
             this.showError(error.message);
-            this.container.innerHTML = this.renderMockData();
+            
+            // Render mock data WITH timestamp
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            }).toLowerCase();
+            
+            this.container.innerHTML = `
+                <div class="scoreboard-container">
+                    ${this.renderMockData()}
+                    <div class="last-updated">
+                        <span class="timestamp-label">Last updated:</span>
+                        <span class="timestamp-value">${timestamp}</span>
+                    </div>
+                </div>
+            `;
         } finally {
             this.isLoading = false;
         }
