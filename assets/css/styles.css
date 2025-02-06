@@ -194,11 +194,12 @@ body {
 }
 
 .error-state {
-    background: rgba(255, 0, 0, 0.1);
+    background: rgba(255, 0, 0, 0.2);
     padding: 20px;
     border: 2px solid #ff0000;
     color: #ff4d4d;
     text-align: center;
+    animation: glitch-animation 1s infinite;
 }
 
 .loading-spinner {
@@ -229,7 +230,6 @@ body {
     font-weight: bold;
     text-shadow: 0 0 5px #ff4d4d;
 }
-
 
 /* Existing Animations from Mission Panel */
 @keyframes glowText {

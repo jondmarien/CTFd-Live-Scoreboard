@@ -266,12 +266,12 @@ class Scoreboard {
     
         try {
             const response = await fetch(CONFIG.API_URL, {
-                method: 'GET',
+                //method: 'GET',
                 headers: {
                     'Authorization': `Token ${CONFIG.API_TOKEN}`,
                     'Accept': 'application/json'
                 },
-                mode: 'cors',
+                //mode: 'cors',
             });
 
 
@@ -287,7 +287,7 @@ class Scoreboard {
             // Validate content type
             const contentType = response.headers.get('content-type');
             if (!contentType?.includes('application/json')) {
-                throw new Error("Invalid content type received");
+                throw new Error("Invalid response content type");
             }
     
             const data = await response.json();
@@ -326,30 +326,22 @@ class Scoreboard {
 
         try {
             const responseData = await this.fetchScoreboard();
-            const data = responseData || this.getMockData();
+            const data = Array.isArray(responseData) ? responseData : this.getMockData();
     
+            if (!Array.isArray(data)) {
+                throw new Error('Scoreboard data is not an array');
+            }
+
             // Open scoreboard-container
             let html = '<div class="scoreboard-container">';
             data.forEach((team, index) => {
                 html += this.renderTeam(team, index);
             });
 
-            const now = new Date();
-            const timestamp = now.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true 
-            }).toLowerCase();
-            
-            // Add to scoreboard-container
-            html += `
-                <div class="last-updated">
-                    <span class="timestamp-label">Last updated:</span>
-                    <span class="timestamp-value">${timestamp}</span>
-                </div>
-            `;
-            html += '</div>'; // Close scoreboard-container
+            // Add timestamp
+            const result = this.generateTimestampHTML(html);
+            html = result.html;
+            const now = result.now;
 
             this.container.innerHTML = html;
             this.setupTeamInteractions();
@@ -357,31 +349,75 @@ class Scoreboard {
 
             console.log('Scoreboard updated successfully.');
         } catch (error) {
-            console.error('Update error:', error);
+            console.error('Update failed:', error);
             this.showError(error.message);
-            
+            this.showError('System Overload - Using Backup Data');
+
             // Render mock data WITH timestamp
-            const now = new Date();
-            const timestamp = now.toLocaleTimeString('en-US', { 
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            }).toLowerCase();
-            
-            this.container.innerHTML = `
-                <div class="scoreboard-container">
-                    ${this.renderMockData()}
-                    <div class="last-updated">
-                        <span class="timestamp-label">Last updated:</span>
-                        <span class="timestamp-value">${timestamp}</span>
-                    </div>
-                </div>
-            `;
+            this.container.innerHTML = this.renderMockDataWithTimestamp();
         } finally {
             this.isLoading = false;
         }
     }
+
+    // Function to render mock data with timestamp
+    renderMockDataWithTimestamp() {
+        const mockData = this.getMockData();
+        let html = '<div class="scoreboard-container">';
+        
+        mockData.forEach((team, index) => {
+            html += this.renderTeam(team, index);
+        });
+
+        const timestamp = new Date().toLocaleTimeString('en-US', { 
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+        
+        html += `
+            <div class="last-updated">
+                <span class="timestamp-label">Last updated:</span>
+                <span class="timestamp-value">${timestamp}</span>
+            </div>
+        </div>`; // Close scoreboard-container
+
+        return html;
+    }
+   
+    // Function to generate timestamp HTML for live scoreboard updates
+    generateTimestampHTML(html) {
+        const now = new Date();
+        const timestamp = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+        
+        return {
+            now: now,
+            html: html + `
+                <div class="last-updated">
+                    <span class="timestamp-label">Last updated:</span>
+                    <span class="timestamp-value">${timestamp}</span>
+                </div>
+            </div>` // Close scoreboard-container
+        };
+    }
+
+    getNewDate() {
+        const now = new Date();
+        const timestamp = now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        }).toLowerCase();
+        return timestamp;
+    }
+
 
     retryUpdate() {
         console.log('Retrying scoreboard update...');
