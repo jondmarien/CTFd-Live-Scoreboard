@@ -2,7 +2,7 @@
 
 This is a live scoreboard for CTFd. It updates every 5 minutes and displays the top 200 teams.
 
-![CTFd Live Scoreboard](https://github.com/jondmarien/CTFd-Scoreboard/raw/master/preview.png)
+![CTFd Live Scoreboard](https://github.com/jondmarien/CTFd-Live-Scoreboard/blob/main/BHB%20Mission%20Board.png)
 
 ### Installation
 
