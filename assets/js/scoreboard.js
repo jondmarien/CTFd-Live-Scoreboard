@@ -32,7 +32,7 @@ class Scoreboard {
         
         console.log('Scoreboard: Constructor initialized');
     }
-
+    
     // Matrix Rain Function - From Gabriel S.
     initMatrix() {
         console.log('Matrix: Starting initialization');
@@ -324,7 +324,7 @@ class Scoreboard {
         if (this.isLoading) return;
         this.isLoading = true;
         this.showLoading();
-
+    
         try {
             const responseData = await this.fetchScoreboard();
             const data = Array.isArray(responseData) ? responseData : this.getMockData();
@@ -332,29 +332,40 @@ class Scoreboard {
             if (!Array.isArray(data)) {
                 throw new Error('Scoreboard data is not an array');
             }
-
+    
             // Open scoreboard-container
             let html = '<div class="scoreboard-container">';
-            data.forEach((team, index) => {
-                html += this.renderTeam(team, index);
-            });
-
-            // Add timestamp
+    
+            // Handle empty state with cyberpunk flair
+            if (!data || data.length === 0) {
+                html += `
+                    <div class="error-state">
+                        <span class="glitch-text">NO ACTIVE MISSIONS FOUND</span><br>
+                        <span class="subtext">// CHECK BACK LATER OPERATIVE</span>
+                    </div>
+                `;
+            } else {
+                // Render teams
+                data.forEach((team, index) => {
+                    html += this.renderTeam(team, index);
+                });
+            }
+    
+            // Add timestamp using the new generateTimestampHTML method
             const result = this.generateTimestampHTML(html);
             html = result.html;
             const now = result.now;
-
+    
             this.container.innerHTML = html;
             this.setupTeamInteractions();
             this.lastUpdate = now;
-
+    
             console.log('Scoreboard updated successfully.');
         } catch (error) {
             console.error('Update failed:', error);
-            this.showError(error.message);
-            this.showError('System Overload - Using Backup Data');
-
-            // Render mock data WITH timestamp
+            this.showError('NETWORK BREACH DETECTED');
+            
+            // Use the new renderMockDataWithTimestamp for error state
             this.container.innerHTML = this.renderMockDataWithTimestamp();
         } finally {
             this.isLoading = false;
@@ -369,45 +380,36 @@ class Scoreboard {
         mockData.forEach((team, index) => {
             html += this.renderTeam(team, index);
         });
-
-        const timestamp = new Date().toLocaleTimeString('en-US', { 
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
-        
+    
+        const now = new Date();
         html += `
             <div class="last-updated">
-                <span class="timestamp-label">Last updated:</span>
-                <span class="timestamp-value">${timestamp}</span>
+                <span class="timestamp-label">LAST SYSTEM SCAN:</span>
+                <span class="timestamp-value">
+                    ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+                </span>
             </div>
         </div>`; // Close scoreboard-container
-
+    
         return html;
     }
    
     // Function to generate timestamp HTML for live scoreboard updates
     generateTimestampHTML(html) {
         const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', { 
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        });
         
         return {
             now: now,
             html: html + `
                 <div class="last-updated">
-                    <span class="timestamp-label">Last updated:</span>
-                    <span class="timestamp-value">${timestamp}</span>
+                    <span class="timestamp-label">LAST SYSTEM SCAN:</span>
+                    <span class="timestamp-value">
+                        ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+                    </span>
                 </div>
             </div>` // Close scoreboard-container
         };
     }
-
     getNewDate() {
         const now = new Date();
         const timestamp = now.toLocaleTimeString('en-US', {
