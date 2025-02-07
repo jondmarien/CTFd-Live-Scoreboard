@@ -216,22 +216,26 @@ class Scoreboard {
         const members = team.members || [];
     
         return `
-        <div class="team" data-team-id="${team.id}">
-            <div class="team-header">
-                <span class="position">#${position}</span>
-                <span class="name">${team.name}</span>
-                <div class="solves-count">${solveCount} ${solveCount === 1 ? 'solve' : 'solves'} ${team.score} pts</div>
-            </div>
-            ${members.length > 0 ? `
-            <div class="members" style="display: none;">
-                ${members.map(member => `
-                    <div class="member">
-                        <span class="member-name">${member.name ?? 'Anonymous'}</span>
-                        <span class="member-score">${member.score ?? 0}</span>
+            <div class="team" data-team-id="${team.id}">
+                <div class="team-header team-name">
+                    <span class="position">#${position}</span>
+                    <span class="name">${team.name}</span>
+                    <div class="solves-count">
+                        ${solveCount} ${solveCount === 1 ? 'solve' : 'solves'} 
+                        ${team.score} pts
                     </div>
-                `).join('')}
-            </div>` : ''}
-        </div>`;
+                </div>
+                ${members.length > 0 ? `
+                <div class="members" style="display: none;">
+                    ${members.map(member => `
+                        <div class="member">
+                            <span class="member-name">${member.name ?? 'Anonymous'}</span>
+                            <span class="member-score">${member.score ?? 0}</span>
+                        </div>
+                    `).join('')}
+                </div>` : ''}
+            </div>
+            `;
     }
 
     startAutoUpdate() {

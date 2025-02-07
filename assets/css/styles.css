@@ -42,6 +42,8 @@ body {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.3);
+    /*color: rgba(255, 255, 255, 0.95); /* Increase text opacity */
 }
 
 #scoreboard {
@@ -52,7 +54,18 @@ body {
 
 .scoreboard-container {
     background: transparent;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2); /* New glow effect */
+    border: 1px solid rgba(255, 77, 77, 0.3); /* Subtle border */
+    backdrop-filter: blur(3px); /* Frosted glass effect */
 }
+
+@media (max-width: 768px) {
+    .scoreboard-container {
+      background-color: rgba(0, 0, 0, 0.85) !important;
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+    }
+  }
 
 .last-updated {
     color: #ff4d4d;
@@ -106,7 +119,7 @@ body {
     position: relative;
     overflow: hidden;
     margin: 15px 0;
-    background: rgba(0, 0, 0, 0.05);/* Semi-transparent dark background */
+    background: rgba(0, 0, 0, 0.1);/* Semi-transparent dark background */
 }
 
 .team:hover::before {
@@ -136,26 +149,34 @@ body {
 .team-header {
     cursor: pointer;
     padding: 15px;
-    background: rgba(255, 77, 77, 0.1);
+    background: rgba(255, 77, 77, 0.2);
     transition: all 0.3s ease;
 }
 
 .team-header:hover {
-    background: rgba(255, 77, 77, 0.2);
+    background: rgba(255, 77, 77, 0.3);
 }
 
 .team.expanded {
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
 }
 
 .team.expanded .members {
     max-height: 500px; /* Adjust based on max expected member count */
 }
 
+.team-name {
+    color: rgba(255, 255, 255, 1) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    font-size: 1.1em;
+    letter-spacing: 0.05em;
+  }
+
 .members {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .member {
@@ -163,10 +184,12 @@ body {
     justify-content: space-between;
     padding: 8px 0;
     font-size: 0.9em;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .member-score {
     color: #33ff33;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .solves-count {
