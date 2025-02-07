@@ -2,7 +2,7 @@
 
 This is a live scoreboard for CTFd. It updates every 5 minutes and displays the top 200 teams.
 
-![CTFd Live Scoreboard](https://github.com/jondmarien/ctfd-live-scoreboard/blob/d8322012512611551604ec12007cbeadcf2d5020/bhb%20scoreboard%20full%20glitch.mp4)
+![CTFd Live Scoreboard](https://github.com/jondmarien/ctfd-live-scoreboard/blob/main/bhb%20scoreboard%20full%20glitch.mp4)
 
 ### Installation
 
