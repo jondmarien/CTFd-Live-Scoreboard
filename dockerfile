@@ -6,7 +6,10 @@ WORKDIR /app
 
 # Copy all project files
 COPY index.html .
-COPY assets/ ./assets/
+COPY assets/ /app/assets/
+
+# Ensure CSS files have correct permissions
+RUN chmod -R 755 /app
 
 # Copy NGINX configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
