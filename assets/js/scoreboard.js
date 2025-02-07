@@ -245,7 +245,7 @@ class Scoreboard {
         // Set up periodic updates
         this.updateInterval = setInterval(() => {
             this.updateScoreboard();
-        }, CONFIG.UPDATE_INTERVAL);
+        }, window.CONFIG.UPDATE_INTERVAL);
     }
     
     // Add cleanup method
@@ -258,18 +258,18 @@ class Scoreboard {
     // Function to fetch scoreboard data -- and catch errors  
     async fetchScoreboard() {
         // Validate configuration
-        console.log('CONFIG at initialization:', CONFIG);
+        console.log('CONFIG at initialization:', window.CONFIG);
         console.log('Fetching scoreboard data...');
         
-        if (!CONFIG?.API_URL) {
+        if (!window.CONFIG?.API_URL) {
             throw new Error('API URL is not defined in config.js');
         }
     
         try {
-            const response = await fetch(CONFIG.API_URL, {
+            const response = await fetch(window.CONFIG.API_URL, {
                 //method: 'GET',
                 headers: {
-                    'Authorization': `Token ${CONFIG.API_TOKEN}`,
+                    'Authorization': `Token ${window.CONFIG.API_TOKEN}`,
                     'Accept': 'application/json'
                 },
                 //mode: 'cors',
@@ -439,7 +439,7 @@ class Scoreboard {
         // Set new interval
         this.updateInterval = setInterval(() => {
             this.updateScoreboard();
-        }, CONFIG.UPDATE_INTERVAL);
+        }, window.CONFIG.UPDATE_INTERVAL);
 
         // Add cleanup on page unload
         window.addEventListener('beforeunload', () => {

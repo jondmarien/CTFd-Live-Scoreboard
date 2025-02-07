@@ -1,6 +1,10 @@
 # Use official lightweight NGINX image
 FROM nginx:1.25-alpine
 
+# Add API token configuration
+ARG API_TOKEN
+ENV API_TOKEN=$API_TOKEN
+
 # Set working directory
 WORKDIR /app
 
