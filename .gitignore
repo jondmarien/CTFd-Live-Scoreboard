@@ -1,2 +1,9 @@
 # Ignore files for git
+
+## Frontend
 assets/js/config.js
+
+## Backend 
+backend/.env
+backend/node_modules
+backend/package-lock.json
