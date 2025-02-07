@@ -185,10 +185,21 @@ body {
     padding: 8px 12px;
     font-size: 0.9em;
     background-color: rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.member:hover {
+    background: rgba(178, 34, 34, 0.3); /* Dark red background on hover */
+}
+
+.member-name {
+    color: #fff;
+    margin-left: 10px;
 }
 
 .member-score {
     color: #33ff33;
+    margin-right: 10px;
     background-color: rgba(0, 0, 0, 0.3);
 }
 
