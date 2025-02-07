@@ -2,7 +2,7 @@
 
 This is a live scoreboard for CTFd. It updates every 5 minutes and displays the top 200 teams.
 
-![CTFd Live Scoreboard](https://github.com/user-attachments/assets/8e69d394-10bc-43e3-ad6e-007dcfadcfe3)
+![CTFd Live Scoreboard](https://github.com/user-attachments/assets/d2f59d43-2b86-4375-9f14-f376a0f724c2)
 
 ### Installation
 
