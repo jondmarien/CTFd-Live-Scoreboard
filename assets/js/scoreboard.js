@@ -5,6 +5,7 @@
 
 const canvas = document.getElementById('matrixCanvas');
 const ctx = canvas.getContext('2d');
+//const cors = false;
 
 // Scoreboard Class
 class Scoreboard {
@@ -20,6 +21,7 @@ class Scoreboard {
         this.lastUpdate = null;
         this.updateInterval = null;
         this.isLoading = false;
+        //this.cors = true;
         
          // Initialize matrix after DOM is loaded
          if (document.readyState === 'loading') {
@@ -266,6 +268,11 @@ class Scoreboard {
     
         try {
             console.log('Fetching scoreboard data from:', window.CONFIG.API_URL);
+            //if (this.cors){
+                // Add CORS proxy for development
+            //const response = await fetch(`https://cors-anywhere.herokuapp.com/${CONFIG.API_URL}`);
+           //}
+
             const response = await fetch(window.CONFIG.API_URL, {
                 //method: 'GET',
                 headers: {
@@ -276,8 +283,7 @@ class Scoreboard {
             });
 
 
-            // Add CORS proxy for development
-            //const response = await fetch(`https://cors-anywhere.herokuapp.com/${CONFIG.API_URL}`, {
+            
     
             // Handle HTTP errors
             if (!response.ok) {
