@@ -33,15 +33,32 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and Push
+    - name: Build and Push Frontend
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         platforms: linux/amd64,linux/arm64
+        target: frontend
         tags: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ github.sha }}
+        labels: |
+          org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+        push: ${{ github.event_name != 'pull_request' }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and Push Backend
+      uses: docker/build-push-action@v5
+      with:
+        context: ./backend
+        file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64
+        target: backend
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ github.sha }}
         labels: |
           org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
         push: ${{ github.event_name != 'pull_request' }}
@@ -52,5 +69,7 @@ jobs:
 
     - name: Verify Deployment
       run: |
-        echo "Image pushed to:"
-        echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:$(docker manifest inspect -v ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | jq -r '.Descriptor.digest')"
+        echo "Frontend image pushed to:"
+        echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend@sha256:$(docker manifest inspect -v ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:latest | jq -r '.Descriptor.digest')"
+        echo "Backend image pushed to:"
+        echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend@sha256:$(docker manifest inspect -v ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:latest | jq -r '.Descriptor.digest')"
