@@ -7,7 +7,10 @@ This is a live scoreboard for CTFd. It updates every 5 minutes and displays the 
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/jondmarien/CTFd-Scoreboard.git
-2. Run on a local server or pull from docker to CTFd: `python3 -m http.server 8000`
+2. Run on a local server or pull from docker to CTFd: 
+`python3 -m http.server 8000`
+OR
+`docker pull ghcr.io/jondmarien/ctfd-scoreboard:latest`
 
 ### Configuration
 1. Create a `config.js` file with the following content:
