@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  API_TOKEN: ${{ secrets.API_TOKEN }}
 
 jobs:
   docker-build:
@@ -46,6 +47,8 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        build-args: |
+          API_TOKEN=${{ secrets.API_TOKEN }}
 
     - name: Verify Deployment
       run: |
