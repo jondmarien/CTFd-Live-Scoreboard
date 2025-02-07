@@ -259,13 +259,13 @@ class Scoreboard {
     async fetchScoreboard() {
         // Validate configuration
         console.log('CONFIG at initialization:', window.CONFIG);
-        console.log('Fetching scoreboard data...');
         
         if (!window.CONFIG?.API_URL) {
             throw new Error('API URL is not defined in config.js');
         }
     
         try {
+            console.log('Fetching scoreboard data from:', window.CONFIG.API_URL);
             const response = await fetch(window.CONFIG.API_URL, {
                 //method: 'GET',
                 headers: {
@@ -292,7 +292,6 @@ class Scoreboard {
             }
     
             const data = await response.json();
-    
             console.log('Data received:', data);
 
             // Validate response structure
@@ -363,8 +362,9 @@ class Scoreboard {
             console.log('Scoreboard updated successfully.');
         } catch (error) {
             console.error('Update failed:', error);
-            this.showError('NETWORK BREACH DETECTED');
-            
+            this.showError('SYSTEM MALFUNCTION - CHECK CONSOLE');
+            console.error('Full error object:', error)
+
             // Use the new renderMockDataWithTimestamp for error state
             this.container.innerHTML = this.renderMockDataWithTimestamp();
         } finally {
@@ -439,7 +439,7 @@ class Scoreboard {
         // Set new interval
         this.updateInterval = setInterval(() => {
             this.updateScoreboard();
-        }, window.CONFIG.UPDATE_INTERVAL);
+        }, CONFIG.UPDATE_INTERVAL);
 
         // Add cleanup on page unload
         window.addEventListener('beforeunload', () => {
