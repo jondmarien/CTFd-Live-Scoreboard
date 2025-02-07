@@ -4,10 +4,6 @@ This is a live scoreboard for CTFd. It updates every 5 minutes and displays the 
 
 ![CTFd Live Scoreboard](https://github.com/user-attachments/assets/8e69d394-10bc-43e3-ad6e-007dcfadcfe3)
 
-
-
-0full%20glitch.mp4)
-
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/jondmarien/CTFd-Scoreboard.git
